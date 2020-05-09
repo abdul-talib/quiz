@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="quiz" class="container quiz">
+        <!--quiz question-->
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const question = [
+            {
+                q: 'What are the advantages of cloud computing over computing on premises ?',
+                a:[ 
+                    'Avoid large capital purchases',
+                    'Use on-demand capacity',
+                    'Go global in minute',
+                    'Increase speed and agility',
+                    'All of the above'
+                ],
+                correct: 4
+            },
+            {
+                q: 'What is the pricing model that enables AWS customers to pay for resources on as needed basis?',
+                a:[
+                    'Pay as you go',
+                    'Pay as you buy',
+                    'Pay as you reserve',
+                    'Pay as you decommision'
+
+                ],
+                correct: 0
+            },
+
+             {
+                q: 'Which is not a cloud deployment model? ',
+                a:[
+                    'System administration as a service',
+                    'Infrastructure as a service',
+                    'Software as a service',
+                    'Platform as a service'
+                ],
+                correct: 0
+             }   
+
+        ]
+
+        function init(){
+
+            const quizEl = document.getElementById('quiz')
+            //loop through the array of questions
+            //for each question make html>
+            let quizStr = ''
+
+            question.forEach(function(question, qIndex){
+                    let answerStr = ''
+                    const answerOrder = randomRange(question.a.length)
+                    question.a.forEach(function(answer, aIndex){
+                        answerStr += `
+                            <li style="order: ${answerOrder[aIndex]} ">
+                                <label>
+                                    <input 
+                                    type="radio" 
+                                    name="question-${qIndex}"
+                                    data-correct="${question.correct === aIndex}"
+                                    >
+                                    ${answer}
+                                </label>
+                            </li>
+                        `
+                    })
+                quizStr += `
+                <form>
+                    <h1>${question.q}</h1>
+                    <div class="alert">-</div>
+                    <ul style="display: flex; flex-direction: column">
+                        ${answerStr}
+                    </ul>
+                    <button type="submit">Submit</button>
+                </form>
+                `
+            })
+
+            quizEl.innerHTML = quizStr
+
+            quizEl.addEventListener('submit', function(e){
+                e.preventDefault()
+                const alert = e.target.querySelector('div.alert')
+                const selectedInput = e.target.querySelector('input[type=radio]:checked')
+                if (selectedInput === null) {
+                    alert.innerHTML = 'Please select an answer'
+                }   else if (selectedInput.dataset.correct === "true"){
+                    alert.innerHTML = "That's Correct"
+                } else {
+                    alert.innerHTML = "Wrong. Try again"
+                }
+                console.log(selectedInput)
+            })
+        }
+        
+        init()
+        
+        function random(n) {
+            const r = Math.random() * n
+            return Math.floor(r)
+
+        }
+
+        function randomRange(x) {
+            const arr = []
+            for (let i = 0; i < x; i +=1){
+                arr.push(i)
+            }
+
+        const randomArr = []
+        while(arr.length > 0){
+            const randomIndex = random(arr.length)
+            const randomNumber = arr[randomIndex]
+            randomArr.push(randomNumber)
+            arr.splice(randomIndex, 1)
+        }
+
+        return randomArr
+
+        }
+        
+        randomRange(8)
+        //for (let i = 0; i < 100; i += 1) {
+          //  random(10)
+            //}
+            </script>
+</body>
+</html>
